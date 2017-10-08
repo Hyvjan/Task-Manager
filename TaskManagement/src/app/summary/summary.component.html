@@ -1,0 +1,82 @@
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+	<h2 class="text-center">Choose team to summarize</h2>
+	<form (ngSubmit)="onSubmit()" #f="ngForm">
+		<div id="team-data">
+			<div class="form-group">
+				<label for="taskgroup">Task group</label>
+				<select
+						name="taskgroup"
+						id="taskgroup"
+						ngModel
+						required
+						class="form-control">
+					<option *ngFor="let team of user.teamMember; let i=index" 
+							[value]=team>{{team}}
+					</option>
+				</select>
+				<h3 class="text-center">Select time period to report:</h3>
+				<label for="startdate">Start date:</label>
+				<input 	name="startdate" 
+						id="startdate"
+						type="date"
+						ngModel
+						required
+						class="form-control"> 
+				<label for="enddate">end date:</label>
+				<input 	name="enddate" 
+						id="enddate"
+						type="date"
+						ngModel
+						required
+						class="form-control"> 
+				<br>
+				<button type="submit" [disabled]="!f.valid" class="btn btn-primary">Add task</button>
+			</div>
+		</div>
+	</form>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+		<h2 class="text-center">Summaries on team member level</h2>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+		<h3 class="text-center"> Finished tasks/team member</h3>
+		<div style="display: block">
+  			<canvas baseChart width="100" height="100"
+          		[data]="finishedChartData"
+          		[labels]="pieChartLabels"
+          		[options]="pieChartOptions"
+          		[chartType]="pieChartType">
+          	</canvas>
+		</div>
+	</div>
+	<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+		<h3 class="text-center"> Unfinished tasks/team member</h3>
+		<div style="display: block">
+  			<canvas baseChart width="100" height="100"
+          		[data]="unfinishedChartData"
+          		[labels]="pieChartLabels"
+          		[options]="pieChartOptions"
+          		[chartType]="pieChartType">
+          	</canvas>
+		</div>
+	</div>
+	<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+		<h3 class="text-center"> % of tasks finished late/team member</h3>
+		<div style="display: block">
+  			<canvas baseChart width="100" height="100"
+          		[data]="finishedLateChartData"
+          		[labels]="pieChartLabels"
+          		[options]="pieChartOptions"
+          		[chartType]="pieChartType">
+          	</canvas>
+		</div>
+	</div>
+	<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+		<h3 class="text-center"> Average days to finish task/team member</h3>
+	</div>
+</div>

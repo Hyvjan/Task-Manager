@@ -1,0 +1,89 @@
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+		<h2 class="text-center">Open tasks</h2>
+		<ul *ngFor="let task of taskList; let i= index">
+			<li><strong>task title:</strong> {{ task.taskName }}, <strong>task description:</strong> {{ task.taskDescription}},
+			<strong>Task group:</strong> {{task.domain}}, <strong>Who is responsible:</strong> {{ task.whosResponsibility }}, <strong>Due date:</strong> {{task.duedate|date:'dd/MM/yyyy'}},
+			 <strong>Task status:</strong> {{ task.status}}%, <strong>task created:</strong> {{ task.created|date:'dd/MM/yyyy'}}, <strong>task Hours:</strong> {{task.hoursUsed}}, <strong>Task finished date:</strong> {{task.finished|date:'dd/MM/yyyy'}}
+			<u><a (click)="editTask(task, i)">Edit task</a></u>  <u><a (click)="deleteTask(task)">Delete Task</a></u>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+	<h2 class="text-center">Add task</h2>
+	<form (ngSubmit)="addTask()" #f="ngForm">
+		<div id="task-data">
+			<div class="form-group">
+				<label for="tasktitle">Task title</label>
+				<input 	type="text" 
+						name="tasktitle"
+						id="tasktitle"
+						ngModel
+						required
+						class="form-control">
+				<label for="descriptionarea">description here</label>
+				<textarea 	name="descriptionarea"
+						   	id="descriptionarea"
+						   	ngModel
+						   	required
+						   	class="form-control"></textarea>
+				<label for="taskcreated">Task received</label>
+				<input 	type="date" 
+						name="taskcreated"
+						id="taskcreated"
+						ngModel
+						required
+						class="form-control">
+				<label for="taskgroup">Task group</label>
+				<select
+						name="taskgroup"
+						id="taskgroup"
+						ngModel
+						required
+						(ngModelChange)="getPersonsInTeam($event)"
+						class="form-control">
+					<option *ngFor="let team of user.teamLeader; let i=index" 
+							[value]=team>{{team}}
+					</option>
+				</select>
+				<label for="responsible">Who is responsible:</label>
+				<select name="responsible"
+						id="responsible"
+						ngModel
+						class="form-control">
+							<option *ngFor="let person of personsInTeam" 			[value]=person.email>{{ person.email }}</option>
+						</select>
+				<label for="duedate">Due date:</label>
+				<input 	type="date" 
+						name="duedate"
+						id="duedate"
+						ngModel
+						class="form-control">
+				<label for="taskstatus">Task status</label>
+				<input 	type="number" 
+						name="taskstatus"
+						id="taskstatus"
+						[ngModel]="initNumber"
+						class="form-control">
+				<label for="taskhours">Task hours used</label>
+				<input 	type="number" 
+						name="taskhours"
+						id="taskhours" 
+						[ngModel]="initNumber"
+						class="form-control"> 
+				<label for="taskfinished">Task finished</label>
+				<input 	type="date" 
+						name="taskfinished"
+						id="taskfinished"
+						ngModel
+						class="form-control">
+				<br>
+				<button type="submit" [disabled]="!f.valid" class="btn btn-primary">Add task</button>
+			</div>
+		</div>
+	</form>
+	</div>
+</div>
+
