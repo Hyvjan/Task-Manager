@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
+
 var Task = require('../models/task');
 var User = require('../models/user');
 
@@ -70,8 +73,6 @@ router.patch('/task:id', function (req, res, next) {
 	});
 });
 
-
-
 /*Get messages */
 router.get('/task', function(req, res, next) {
 	Task.find()
@@ -88,6 +89,64 @@ router.get('/task', function(req, res, next) {
 				});
 		});
 });
+
+
+/*Post user*/
+router.post('/user', function (req, res, next) {
+	var user = new User({
+		firstName: req.body.firstName,
+		lastName: req.body.firstName,
+		email: req.body.email,
+		teamMember: req.body.email,
+		teamLeader: req.body.email,
+		password: bcrypt.hashSync(req.body.password, 10)
+	});
+	user.save(function (err, result) {
+		if (err) {
+			return res.status(500).json({
+				title: 'An error occurred',
+				error: err
+			});
+		}
+		res.status(201).json({
+			message: 'User created',
+			obj: result
+		});
+	});
+
+});
+
+/*POst rout for signing in*/
+router.post('/login', function (req, res, next) {
+	User.findOne({email: req.body.email}, function(err, user){
+		if (err) {
+			return res.status(500).json({
+				title: 'An error occurred',
+				error: err
+			});
+		}
+		if (!user) {
+			return res.status(401).json({
+				title: 'Login failed',
+				error: {message: 'Invalid user credentials'}
+			});
+		}
+		if (!bcrypt.compareSync(req.body.password, user.password)) {
+			return res.status(401).json({
+				title: 'Login failed',
+				error: {message: 'Invalid user credentials'}
+			});
+		}
+		var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
+		res.status(200).json({
+			message: 'Succesfully logged in',
+			token: token,
+			userId: user._id
+		});
+	});
+
+});
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
